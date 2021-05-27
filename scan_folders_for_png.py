@@ -10,9 +10,13 @@ import shutil
 # path to the main working WormWatcher folder
 filesPath = '/Volumes/WormWatcher/WormWatcher'
 
-# number of days want to store as a backup
+# number of days want to store as a on computer backup
 # default 10
 days_of_backup = 10
+
+# generally:    3 sessions/day -> ~675MB/day
+#               81 plates/day -> 54.675GB/day
+#               10 days of backup -> 546.75GB stored on computer
 
 # path to the backup folder, probably on a seperate hard drive
 backup_path = '/e/WW_backup/WormWatcher'
@@ -90,6 +94,7 @@ for item in dir_list:
         item_path = Path(item)
 
         # recursively go through item_path and list all .pngs (Can be changed to whatever storage medium)
+        # takes a while
         list_of_png_paths = list(item_path.glob('**/*.png'))
 
         # number of items moved to backup
