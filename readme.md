@@ -20,4 +20,6 @@ Make sure that the backup is connected and discoverable in either network or My 
     into whatever python installation you're using
     
 5.
+    Create a task scheduler script to run (make sure when the WW is NOT running) to run the .bat script every day
     
+6. sadfadf
