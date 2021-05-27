@@ -19,7 +19,7 @@ backup_path = '/e/WW_backup/WormWatcher'
 
 # list of required dirs 
 list_of_required_dirs = [
-'backups','CoolTerm Libs','CoolTerm Resources','Dependents','Documents',
+'backups','CoolTerm Libs','CoolTerm Resources','Dependents','Documents','Logs',
 'logs','models','old_params_05-Feb-2019_10-28-50','old_params_06-Mar-2019_15-23-58',
 'old_params_21-May-2019_12-38-39','ROI_images_24','ROI_images_WM',
 'ROI_images_WM_new','Scripts','TestScripts','WormWatcher 1.72',
