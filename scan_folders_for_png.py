@@ -10,7 +10,7 @@ filesPath = '/Volumes/WormWatcher/WormWatcher'
 
 days_of_backup = 12
 
-backup_path = '/e/WW_backup/'
+backup_path = '/e/WW_backup/WormWatcher'
 
 list_of_required_dirs = [
 'backups','CoolTerm Libs','CoolTerm Resources','Dependents','Documents',
@@ -41,14 +41,23 @@ for item in dir_list:
 
         if list_of_png_paths:
             
-            for count,val in enumerate(list_of_png_paths):
-                itemTime = arrow.get(val.stat().st_mtime)
+            for count,this_path in enumerate(list_of_png_paths):
+                itemTime = arrow.get(this_path.stat().st_mtime)
 
                 if itemTime < criticalTime:
-                    # move to backup folder
+                    this_path_str = str(this_path)
+                    move_to = this_path_str.replace(filesPath,backup_path)
+
+                    head,tail = os.path.split(move_to)
+
+                    if os.path.isdir(head):
+                        pass
+                    else:
+                        os.makedirs(head)
+
                     pass
                 else:
-                    print(val)
+                    print(this_path)
 
         print(len(list_of_png_paths), 'items in',item_path)
 
