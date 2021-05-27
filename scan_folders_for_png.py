@@ -11,11 +11,54 @@ import shutil
 filesPath = '/Volumes/WormWatcher/WormWatcher'
 
 # number of days want to store as a backup
-# default 12
-days_of_backup = 12
+# default 10
+days_of_backup = 10
 
 # path to the backup folder, probably on a seperate hard drive
 backup_path = '/e/WW_backup/WormWatcher'
+
+def move_to_backup(move_to,this_path_str):
+
+    # find head and tail (path and name) of where file is going
+    head,tail = os.path.split(move_to)
+
+    # if path already to where its going already exists 
+    if os.path.isdir(head):
+        # if the file doesnt already exist in the backup
+        if not os.path.isfile(move_to):
+            # move file from this_path_str to move_to 
+            shutil.move(this_path_str,move_to)
+        # if the file already exists in the backup 
+        else:
+            # then you can just remove the file as its already backed up
+            os.remove(this_path_str)
+    # if need to make the path 
+    else:
+        # recursively make the dirs to where its going
+        os.makedirs(head)
+        # move file from this_path_str to move_to 
+        shutil.move(this_path_str,move_to)
+
+    return 0 
+
+def copy_to_backup(move_to,this_path_str):
+
+    # find head and tail (path and name) of where file is going
+    head,tail = os.path.split(move_to)
+    # if path already to where its going already exists 
+    if os.path.isdir(head):
+        # copy file from this_path_str to move_to 
+        # unless it already exists in the folder
+        if not os.path.isfile(move_to):
+            shutil.copy2(this_path_str,move_to)
+    else:
+        # recursively make the dirs to where its going
+        os.makedirs(head)
+        # move file from this_path_str to move_to 
+        shutil.copy2(this_path_str,move_to)
+
+    return 0
+
 
 # list of required dirs 
 list_of_required_dirs = [
@@ -50,43 +93,37 @@ for item in dir_list:
         list_of_png_paths = list(item_path.glob('**/*.png'))
 
         # number of items moved to backup
-        backup_counter = 0
+        move_file_counter = 0
+        copy_file_counter = 0
 
         # if not empty
         if list_of_png_paths:
             
             # iterate through each png
             for _,this_path in enumerate(list_of_png_paths):
-
                 # find how old the file is
                 itemTime = arrow.get(this_path.stat().st_mtime)
+                # covnert the path to a str (easier to work with)
+                this_path_str = str(this_path)
+                # get where the file is going
+                move_to = this_path_str.replace(filesPath,backup_path)
 
                 # if the file is older than X days
                 if itemTime < criticalTime:
-                    
-                    # convert to a string
-                    this_path_str = str(this_path)
-                    # get where the file is going
-                    move_to = this_path_str.replace(filesPath,backup_path)
-                    # find head and tail (path and name) of where file is going
-                    head,tail = os.path.split(move_to)
-
-                    # if path already to where its going already exists 
-                    if os.path.isdir(head):
-                        # move file from this_path_str to move_to 
-                        # shutil.move(this_path_str,move_to)
-                        backup_counter = backup_counter + 1 
-                    else:
-                        # recursively make the dirs to where its going
-                        # os.makedirs(head)
-                        # move file from this_path_str to move_to 
-                        # shutil.move(this_path_str,move_to)
-                        backup_counter = backup_counter + 1
+                    # then move it to the backup (removes file)
+                    move_to_backup(move_to,this_path_str)
+                    move_file_counter = move_file_counter + 1
+                
+                # if the file is younger than X days
                 else:
-                    # item is not old enough to be moved to backup
-                    pass
+                    # then copy it to the backup (keeps file)
+                    copy_to_backup(move_to,this_path_str)
+                    copy_file_counter = copy_file_counter + 1
+
 
         print(len(list_of_png_paths), 'items in',item_path)
-        print(backup_counter, 'items moved')
+        print(move_file_counter, 'items moved')
+        print(copy_file_counter, 'items copied')
+
 
 print('end of script')
