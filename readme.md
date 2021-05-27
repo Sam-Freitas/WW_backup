@@ -3,10 +3,10 @@ Usage
 Make sure that the backup is connected and discoverable in either network or My PC
 
 1. 
-    Change the backup path to the correct path
+    (in .py script) Change the backup path to the correct path
     
 2. 
-    Change the WormWatcher folder to the correct path
+    (in .py script) Change the WormWatcher folder to the correct path
     
 3. 
     Edit the .bat file to work properly with specific machine (problems with python, py, or whatever the default python3 installation or specific venv is)
